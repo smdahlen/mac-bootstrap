@@ -17,7 +17,6 @@ sudo rm -rf /opt/chef
 rm -rf ~/.rbenv
 
 # removes homebrew
-# TODO: move into a cookbook since it was not provisioned with bootstrap.sh
 rm -rf /usr/local/{,.git}*
 
 # cleans git repository of untracked and ignored files
