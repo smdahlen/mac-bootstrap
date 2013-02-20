@@ -22,4 +22,4 @@ rm -rf /usr/local/{,.git}*
 
 # cleans git repository of untracked and ignored files
 cd $dir
-#git clean -fdx
+git clean -fdx
