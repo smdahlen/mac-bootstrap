@@ -6,7 +6,7 @@
 # in dna.json using cookbooks listed in Berksfile.
 #
 
-
+old_dir=$PWD
 dir=$(cd "$(dirname "$0")" && pwd)
 ruby_version='1.9.3-p385'
 
@@ -22,37 +22,43 @@ while true; do
 done 2>/dev/null &
 
 # installs homebrew
-echo -n 'Installing homebrew... ' >&3
 if ! [ -e /usr/local/bin/brew ]; then
+    echo -n 'Installing homebrew... ' >&3
     ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)" </dev/null
+    echo 'complete.' >&3
 fi
-echo 'complete.' >&3
 
 # installs chef
-echo -n 'Installing chef... ' >&3
 if ! [ -d /opt/chef ]; then
+    echo -n 'Installing chef... ' >&3
     curl -L https://www.opscode.com/chef/install.sh | sudo bash
     cd $dir
     mkdir -p chef/{cookbooks,cache}
+    echo 'complete.' >&3
 fi
-echo 'complete.' >&3
 
 # installs rbenv and the specified ruby version
-echo -n "Installing rbenv and ruby ${ruby_version}... " >&3
-if ! which rbenv 2>/dev/null; then
+if ! hash rbenv 2>/dev/null; then
+    echo -n "Installing rbenv and ruby ${ruby_version}... " >&3
     brew install rbenv
     brew install ruby-build
-    PATH=~/.rbenv/{shims,bin}:$PATH
+    PATH=~/.rbenv/shims:~/.rbenv/bin:$PATH
     rbenv install $ruby_version
     rbenv global $ruby_version
     rbenv rehash
+    echo 'complete.' >&3
 fi
-echo 'complete.' >&3
 
-# installs berkshelf and vendors cookbooks
-echo -n 'Installing berkshelf and vendoring cookbooks... ' >&3
-gem install --no-rdoc --no-ri berkshelf
-rbenv rehash
+# installs berkshelf
+if ! gem list -i berkshelf >/dev/null; then
+    echo -n 'Installing berkshelf... ' >&3
+    gem install --no-rdoc --no-ri berkshelf
+    rbenv rehash
+    echo 'complete.' >&3
+fi
+
+# vendors cookbooks managed by berkshelf
+echo -n 'Vendoring cookbooks managed by berkshelf... ' >&3
 cd $dir
 berks install --path $dir/chef/cookbooks
 echo 'complete.' >&3
@@ -62,5 +68,6 @@ echo -n 'Provisioning cookbooks with chef-solo... ' >&3
 chef-solo -c $dir/solo.rb -j $dir/dna.json
 echo 'complete.' >&3
 
-# closes file descriptor
+# closes file descriptor and restores working directory
 exec 3>&-
+cd $old_dir
