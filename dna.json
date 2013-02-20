@@ -1,0 +1,6 @@
+{
+    "run_list": [
+        "recipe[homebrew]",
+        "recipe[workstation]"
+    ]
+}
