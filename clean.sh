@@ -4,14 +4,10 @@
 # Cleans up resources provisioned by bootstrap.sh.
 #
 
-
+old_dir=$PWD
 dir=$(cd "$(dirname "$0")" && pwd)
 
-sudo -v
-
-# removes chef
-sudo rm -rf $(find /usr/bin -lname '/opt/chef/*')
-sudo rm -rf /opt/chef
+cd $dir
 
 # removes rbenv
 rm -rf ~/.rbenv
@@ -19,6 +15,10 @@ rm -rf ~/.rbenv
 # removes homebrew
 rm -rf /usr/local/{,.git}*
 
+# removes personal dotfiles
+rm -rf ../dotfiles
+
 # cleans git repository of untracked and ignored files
-cd $dir
 git clean -fdx
+
+cd $old_dir
