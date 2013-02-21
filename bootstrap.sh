@@ -27,11 +27,13 @@ if ! hash irssi 2>/dev/null; then
 fi
 
 # installs personal dotfiles
-cd ..
+cd $dir/..
 if ! [ -d dotfiles ]; then
     echo -n 'Installing personal dotfiles... ' >&3
     git clone git@github.com:smdahlen/dotfiles.git
-    source dotfiles/setup.sh
+    cd dotfiles
+    git submodule init && git submodule update
+    ./setup.sh
     echo 'complete.' >&3
 fi
 
