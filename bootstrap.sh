@@ -34,6 +34,7 @@ if ! hash irssi 2>/dev/null; then
     if ! grep "^$(brew --prefix)/bin/bash" /etc/shells >/dev/null; then
         echo "$(brew --prefix)/bin/bash" | sudo tee -a /etc/shells >/dev/null
     fi
+    chsh -s "$(brew --prefix)/bin/bash"
     echo 'complete.' >&3
 fi
 
