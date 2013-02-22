@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # Bootstraps a mac by installing homebrew, common tools, personal dotfiles,
@@ -12,6 +12,14 @@ ruby_version='1.9.3-p385'
 # redirects standard and error output to log file
 exec 3>&1 1>$dir/bootstrap.log 2>&1
 
+# starts sudo keepalive as described at https://gist.github.com/cowboy/3118588
+sudo -v
+while true; do
+    sudo -n true
+    sleep 60
+    kill -0 $$ || exit
+done 2>/dev/null &
+
 # installs homebrew
 if ! [ -e /usr/local/bin/brew ]; then
     echo -n 'Installing homebrew... ' >&3
@@ -22,7 +30,10 @@ fi
 # installs common tools
 if ! hash irssi 2>/dev/null; then
     echo -n 'Installing common tools... ' >&3
-    brew install mercurial vim git bash-completion irssi
+    brew install bash mercurial vim git bash-completion irssi
+    if ! grep "^$(brew --prefix)/bin/bash" /etc/shells >/dev/null; then
+        echo "$(brew --prefix)/bin/bash" | sudo tee -a /etc/shells >/dev/null
+    fi
     echo 'complete.' >&3
 fi
 
@@ -65,5 +76,4 @@ bundle install >&3
 exec 3>&-
 cd $old_dir
 
-# reloads bashrc
-source ~/.bashrc
+unset dir old_dir ruby_version
