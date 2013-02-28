@@ -17,7 +17,7 @@ sudo -v
 while true; do
     sudo -n true
     sleep 60
-    kill -0 $$ || exit
+    kill -0 "$$" || exit
 done 2>/dev/null &
 
 # installs homebrew
@@ -28,25 +28,15 @@ if ! [ -e /usr/local/bin/brew ]; then
 fi
 
 # installs common tools
+# TODO: fix sudo password prompt (subshell issue?)
 if ! hash irssi 2>/dev/null; then
     echo -n 'Installing common tools... ' >&3
     brew install bash mercurial vim git bash-completion irssi
     if ! grep "^$(brew --prefix)/bin/bash" /etc/shells >/dev/null; then
         echo "$(brew --prefix)/bin/bash" | sudo tee -a /etc/shells >/dev/null
     fi
-    chsh -s "$(brew --prefix)/bin/bash"
     echo 'complete.' >&3
-fi
-
-# installs personal dotfiles
-cd $dir/..
-if ! [ -d dotfiles ]; then
-    echo -n 'Installing personal dotfiles... ' >&3
-    git clone git@github.com:smdahlen/dotfiles.git
-    cd dotfiles
-    git submodule init && git submodule update
-    ./setup.sh
-    echo 'complete.' >&3
+    echo 'Update shell by running chsh -s /usr/local/bin/bash' >&3
 fi
 
 # installs rbenv and the specified ruby version
@@ -72,6 +62,15 @@ fi
 # installs gems
 cd $dir
 bundle install >&3
+rbenv rehash
+
+# installs personal dotfiles
+if ! [ -d ~/.homesick ]; then
+    echo -n 'Installing personal dotfiles... ' >&3
+    homesick clone smdahlen/dotfiles
+    homesick symlink smdahlen/dotfiles
+    echo 'complete.' >&3
+fi
 
 # closes file descriptor and restores working directory
 exec 3>&-

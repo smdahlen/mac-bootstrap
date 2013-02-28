@@ -17,12 +17,11 @@ rm -rf ~/.rbenv
 # removes homebrew
 # TODO: remove bash line in /etc/shells
 rm -rf /usr/local/{,.git}*
+sudo sed -in '/^\/usr\/local/d' /etc/shells
 
 # removes personal dotfiles
-rm -rf $(find ~ -lname "$(cd "${dir}/../dotfiles" && pwd)/*")
-rm -rf ../dotfiles
-
-hash -r
+rm -rf $(find ~ -lname "${HOME}/.homesick/*")
+rm -rf ~/.homesick
 
 cd $old_dir
 
