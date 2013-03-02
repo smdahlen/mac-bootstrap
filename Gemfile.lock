@@ -18,7 +18,7 @@ GEM
       yajl-ruby (~> 1.1)
     childprocess (0.3.8)
       ffi (~> 1.0, >= 1.0.11)
-    digital_ocean (0.1.0)
+    digital_ocean (0.2.0)
       faraday (~> 0.8.4)
       faraday_middleware
       json
@@ -29,11 +29,11 @@ GEM
     faraday_middleware (0.9.0)
       faraday (>= 0.7.4, < 0.9)
     ffi (1.4.0)
-    hashie (1.2.0)
+    hashie (2.0.2)
     highline (1.6.15)
     homesick (0.7.0)
       thor (>= 0.14.0)
-    i18n (0.6.2)
+    i18n (0.6.4)
     ipaddress (0.8.0)
     json (1.5.5)
     knife-digital_ocean (0.0.5)
@@ -41,7 +41,7 @@ GEM
       digital_ocean
       highline
       net-ssh-multi (~> 1.1)
-    knife-solo (0.2.0)
+    knife-solo (0.3.0.pre2)
       chef (>= 10.12)
       librarian (~> 0.0.20)
       net-ssh (>= 2.2.2, < 3.0)
@@ -75,8 +75,8 @@ GEM
       mixlib-shellout
       systemu
       yajl-ruby
-    rash (0.3.2)
-      hashie (~> 1.2.0)
+    rash (0.4.0)
+      hashie (~> 2.0.0)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     systemu (2.5.2)
@@ -98,5 +98,5 @@ PLATFORMS
 DEPENDENCIES
   homesick (~> 0.7.0)
   knife-digital_ocean (~> 0.0.5)
-  knife-solo (~> 0.2.0)
+  knife-solo (~> 0.3.0.pre2)
   vagrant (~> 1.0.6)
