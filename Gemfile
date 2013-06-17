@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
 
-gem 'knife-solo', '~> 0.3.0.pre2'
-gem 'knife-digital_ocean', '~> 0.0.5'
-gem 'homesick', '~> 0.7.0'
+gem 'homesick', '~> 0.9.0'
+gem 'berkshelf', '~> 2.0.0'

@@ -7,7 +7,7 @@
 
 old_dir=$PWD
 dir=$(cd "$(dirname "$0")" && pwd)
-ruby_version='1.9.3-p385'
+ruby_version='1.9.3-p392'
 
 # redirects standard and error output to log file
 exec 3>&1 1>$dir/bootstrap.log 2>&1
@@ -31,7 +31,7 @@ fi
 # TODO: fix sudo password prompt (subshell issue?)
 if ! hash irssi 2>/dev/null; then
     echo -n 'Installing common tools... ' >&3
-    brew install bash mercurial vim git bash-completion irssi
+    brew install bash mercurial vim git bash-completion irssi curl-ca-bundle
     if ! grep "^$(brew --prefix)/bin/bash" /etc/shells >/dev/null; then
         echo "$(brew --prefix)/bin/bash" | sudo tee -a /etc/shells >/dev/null
     fi
